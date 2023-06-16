@@ -10,7 +10,9 @@ from utils.gh import get_commit_weekly_num, get_commit_author_weekly_num,\
     get_issues_weekly_num
 
 date_now: datetime = datetime.now()
-date_week_ago: datetime = date_now - timedelta(weeks=4)
+date_this_week_end: datetime = date_now - timedelta(days=date_now.weekday()) \
+                               + timedelta(days=6)
+date_week_ago: datetime = date_this_week_end - timedelta(weeks=4)
 
 st.title('OSS Insight Lite')
 st.subheader('Some metric not including in https://ossinsight.io')
@@ -24,7 +26,7 @@ option_repo = st.selectbox(
 
 date_range: DateWidgetReturn = st.date_input(
     label="Select the start date",
-    value=(date_week_ago, date_now),
+    value=(date_week_ago, date_this_week_end),
 )
 
 # to avoid UI index error: https://discuss.streamlit.io/t/date-input-range-index-error-while-selecting/22499
@@ -81,7 +83,7 @@ df_contributors = pd.DataFrame(
     },
     index=year_week_list,
 )
-st.pyplot()
+st.line_chart(df_contributors)
 
 st.write("Weekly Issues")
 df_issues = pd.DataFrame(
