@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 import streamlit as st
 import pandas as pd
 from streamlit.elements.time_widgets import DateWidgetReturn
+import os
 
 from req.param import ReqParam
 from utils.reshape import get_dict_val_by_key_order, get_year_week_list
@@ -37,10 +38,14 @@ st.write("For important issue track, please see our [notion database](https://zh
 
 start_date = datetime.combine(date_range[0], datetime.min.time())
 end_date = datetime.combine(date_range[1], datetime.min.time())
-
 year_week_list = get_year_week_list(start_date, end_date)
+try:
+    github_token = st.secrets["GITHUB_TOKEN"]
+except FileNotFoundError:
+    github_token = os.environ.get("GITHUB_TOKEN", None)
 
 req_param = ReqParam(
+    token=github_token,
     repo=option_repo,
     since=start_date,
     until=end_date

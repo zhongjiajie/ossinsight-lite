@@ -16,11 +16,12 @@ DEFAULT_PAGE_NUM = 30
 @cache
 def get_commits(
         *,
+        token: str,
         repo: str,
         since: datetime,
         until: datetime,
 ) -> PaginatedList:
-    g = Github(login_or_token="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")
+    g = Github(login_or_token=token)
     gh_repo = g.get_repo(repo)
     return gh_repo.get_commits(
         since=since,
@@ -31,13 +32,14 @@ def get_commits(
 @cache
 def get_issues(
         *,
+        token: str,
         repo: str,
         since: datetime,
         state: str,
         sort: str,
         direction: str,
 ) -> PaginatedList:
-    g = Github(login_or_token="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")
+    g = Github(login_or_token=token)
     gh_repo = g.get_repo(repo)
     return gh_repo.get_issues(
         since=since,
@@ -51,6 +53,7 @@ def get_commit_weekly_num(req_param: ReqParam) -> dict[str, int]:
     result = dict.fromkeys(get_year_week_list(req_param.since, req_param.until), 0)
 
     commits = get_commits(
+        token=req_param.token,
         repo=req_param.repo,
         since=req_param.since,
         until=req_param.until,
@@ -75,6 +78,7 @@ def get_commit_author_weekly_num(req_param: ReqParam) -> dict[str, int]:
     }
 
     commits = get_commits(
+        token=req_param.token,
         repo=req_param.repo,
         since=req_param.since,
         until=req_param.until,
@@ -104,6 +108,7 @@ def get_issues_weekly_num(req_param: ReqParam) -> dict[str, dict[str, int]]:
     result_close = {i: set() for i in year_week_list}
 
     issues = get_issues(
+        token=req_param.token,
         repo=req_param.repo,
         since=req_param.since,
         state="all",
