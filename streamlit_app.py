@@ -53,33 +53,43 @@ req_param = ReqParam(
     until=end_date
 )
 
-val_commits = get_dict_val_by_key_order(
-    get_commit_weekly_num(req_param)
-)
 
-val_commits_author = get_dict_val_by_key_order(
-    get_commit_author_weekly_num(req_param)
-)
+@st.cache_data
+def data_commits(req: ReqParam) -> list[int]:
+    return get_dict_val_by_key_order(
+        get_commit_weekly_num(req)
+    )
 
-val_issues_update = get_dict_val_by_key_order(
-    get_issues_weekly_num(req_param).get('update')
-)
+@st.cache_data
+def data_commits_author(req: ReqParam) -> list[int]:
+    return get_dict_val_by_key_order(
+        get_commit_author_weekly_num(req)
+    )
 
-val_issues_open = get_dict_val_by_key_order(
-    get_issues_weekly_num(req_param).get('open')
-)
+@st.cache_data
+def data_issues(req: ReqParam) -> [dict, list[int]]:
+    return get_issues_weekly_num(req)
 
-val_issues_close = get_dict_val_by_key_order(
-    get_issues_weekly_num(req_param).get('close')
-)
+@st.cache_data
+def data_issues_update(req: ReqParam) -> list[int]:
+    return data_issues(req).get('update')
+
+@st.cache_data
+def data_issues_open(req: ReqParam) -> list[int]:
+    return data_issues(req).get('open')
+
+@st.cache_data
+def data_issues_close(req: ReqParam) -> list[int]:
+    return data_issues(req).get('close')
+
 
 st.subheader('Metric')
 
 st.write("Weekly Commits")
 df_contributors = pd.DataFrame(
     data={
-        'commits': val_commits,
-        'commits-authors': val_commits_author
+        'commits': data_commits(req_param),
+        'commits-authors': data_commits_author(req_param),
     },
     index=year_week_list,
 )
@@ -88,9 +98,9 @@ st.line_chart(df_contributors)
 st.write("Weekly Issues")
 df_issues = pd.DataFrame(
     data={
-        'open': val_issues_open,
-        'close': val_issues_close,
-        'update': val_issues_update,
+        'issues-open': data_issues_open(req_param),
+        'issues-close': data_issues_close(req_param),
+        'issues-update': data_issues_update(req_param),
     },
     index=year_week_list,
 )
