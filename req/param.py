@@ -7,3 +7,5 @@ class ReqParam(NamedTuple):
     repo: str
     since: datetime
     until: datetime
+    # daily cache from streamlit data
+    today: datetime

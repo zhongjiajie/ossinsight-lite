@@ -50,7 +50,8 @@ req_param = ReqParam(
     token=github_token,
     repo=option_repo,
     since=start_date,
-    until=end_date
+    until=end_date,
+    today=date_now,
 )
 
 
