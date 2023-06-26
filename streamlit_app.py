@@ -9,9 +9,9 @@ from utils.reshape import get_dict_val_by_key_order, get_year_week_list
 from utils.gh import get_commit_weekly_num, get_commit_author_weekly_num,\
     get_issues_weekly_num
 
-date_now: datetime = datetime.now()
-date_this_week_end: datetime = date_now - timedelta(days=date_now.weekday()) \
-                               + timedelta(days=6)
+date_now: datetime = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+date_this_week_end: datetime = (date_now - timedelta(days=date_now.weekday())
+                                + timedelta(days=6))
 date_week_ago: datetime = date_this_week_end - timedelta(weeks=4)
 
 st.title('OSS Insight Lite')
