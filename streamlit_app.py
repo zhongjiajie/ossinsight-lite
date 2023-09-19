@@ -1,14 +1,17 @@
-from datetime import datetime, timedelta
-import streamlit as st
-import pandas as pd
 import os
+from datetime import datetime, timedelta
 
+import pandas as pd
+import streamlit as st
 from streamlit.elements.widgets.time_widgets import DateWidgetReturn
 
 from req.param import ReqParam
+from utils.gh import (
+    get_commit_author_weekly_num,
+    get_commit_weekly_num,
+    get_issues_weekly_num,
+)
 from utils.reshape import get_dict_val_by_key_order, get_year_week_list
-from utils.gh import get_commit_weekly_num, get_commit_author_weekly_num,\
-    get_issues_weekly_num
 
 date_now: datetime = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
 date_this_week_end: datetime = (date_now - timedelta(days=date_now.weekday())

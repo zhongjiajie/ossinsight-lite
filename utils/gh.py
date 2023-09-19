@@ -1,11 +1,11 @@
-from github import Github
+import math
 from datetime import datetime
+from functools import cache
 
+from github import Github
 from github.Commit import Commit
 from github.Issue import Issue
 from github.PaginatedList import PaginatedList
-import math
-from functools import cache
 
 from req.param import ReqParam
 from utils.reshape import get_year_week_list
